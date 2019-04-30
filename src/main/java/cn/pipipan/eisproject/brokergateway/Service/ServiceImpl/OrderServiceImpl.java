@@ -18,11 +18,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     OrderRepository orderRepository;
+
+
+    private Map<String, List<TraderComposite>> buyer = new HashMap<>();
+    private Map<String, List<TraderComposite>> seller = new HashMap<>();
     
-    Map<String, List<TraderComposite>> buyer = new HashMap<>();
-    Map<String, List<TraderComposite>> seller = new HashMap<>();
-    
-    OrderProcessor orderProcessor;
+    private OrderProcessor orderProcessor;
 
     public void process(Order order){
         orderRepository.save(order);
@@ -32,9 +33,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private void initSpecificMapValue(Order order, Map<String, List<TraderComposite>> map) {
-        if (map.get(order.getItemId()) == null) {
-            map.put(order.getItemId(), new ArrayList<>());
-        }
+        map.computeIfAbsent(order.getItemId(), k -> new ArrayList<>());
     }
 
     public void setOrderProcessor(OrderProcessor orderProcessor){
