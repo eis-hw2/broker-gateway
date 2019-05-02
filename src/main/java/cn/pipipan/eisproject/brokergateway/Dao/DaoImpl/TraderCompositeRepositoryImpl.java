@@ -2,6 +2,7 @@ package cn.pipipan.eisproject.brokergateway.Dao.DaoImpl;
 
 import cn.pipipan.eisproject.brokergateway.Core.TraderComposite;
 import cn.pipipan.eisproject.brokergateway.Dao.TraderCompositeRepository;
+import cn.pipipan.eisproject.brokergateway.Domain.Order;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -13,11 +14,17 @@ import java.util.Map;
 public class TraderCompositeRepositoryImpl implements TraderCompositeRepository {
     private Map<String, List<TraderComposite>> buyer = new HashMap<>();
     private Map<String, List<TraderComposite>> seller = new HashMap<>();
+    private List<Order> remainedMarketOrders = new ArrayList<>();
 
     @Override
     public List<TraderComposite> getBuyerTraderCompositeByItemId(String itemId) {
         initSpecificMapValue(itemId, buyer);
         return buyer.get(itemId);
+    }
+
+    @Override
+    public List<Order> getRemainedMarketOrders() {
+        return remainedMarketOrders;
     }
 
     @Override

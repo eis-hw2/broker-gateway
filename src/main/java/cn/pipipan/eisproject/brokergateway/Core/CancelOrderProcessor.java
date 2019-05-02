@@ -8,7 +8,7 @@ import java.util.List;
 @Component("CancelOrderProcessor")
 public class CancelOrderProcessor extends OrderProcessor{
     @Override
-    public Order process(Order order, List<TraderComposite> buyer, List<TraderComposite> seller) {
+    public Order process(Order order, List<TraderComposite> buyer, List<TraderComposite> seller, List<Order> marketOrders) {
         return order;
     }
 }

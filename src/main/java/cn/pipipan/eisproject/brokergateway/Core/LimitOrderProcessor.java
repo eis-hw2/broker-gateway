@@ -16,7 +16,7 @@ public class LimitOrderProcessor extends OrderProcessor{
     //ExecutorService pool;
 
     @Override
-    public Order process(Order order, List<TraderComposite> buyer, List<TraderComposite> seller) {
+    public Order process(Order order, List<TraderComposite> buyer, List<TraderComposite> seller, List<Order> marketOrders) {
         synchronized (buyer){
             System.out.println(order.getId());
         }

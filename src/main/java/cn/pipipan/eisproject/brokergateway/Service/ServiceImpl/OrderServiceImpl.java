@@ -27,8 +27,8 @@ public class OrderServiceImpl implements OrderService {
         orderRepository.save(order);
         List<TraderComposite> buyerTraderComposite = traderCompositeRepository.getBuyerTraderCompositeByItemId(order.getItemId());
         List<TraderComposite> sellerTraderComposite = traderCompositeRepository.getSellerTraderCompositeByItemId(order.getItemId());
-        orderProcessor.process(order, buyerTraderComposite, sellerTraderComposite);
-        return order;
+        List<Order> remainedMarketOrders = traderCompositeRepository.getRemainedMarketOrders();
+        return orderProcessor.process(order, buyerTraderComposite, sellerTraderComposite, remainedMarketOrders);
     }
 
     public void setOrderProcessor(OrderProcessor orderProcessor){
