@@ -1,5 +1,5 @@
 pipeline:
-  build: 
+  build:
     image: registry.cn-hangzhou.aliyuncs.com/acs/maven
     commands:
       - mvn clean package
