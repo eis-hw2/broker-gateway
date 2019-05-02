@@ -1,4 +1,4 @@
-package cn.pipipan.eisproject.brokergateway.Dao.DapImpl;
+package cn.pipipan.eisproject.brokergateway.Dao.DaoImpl;
 
 import cn.pipipan.eisproject.brokergateway.Core.TraderComposite;
 import cn.pipipan.eisproject.brokergateway.Dao.TraderCompositeRepository;
