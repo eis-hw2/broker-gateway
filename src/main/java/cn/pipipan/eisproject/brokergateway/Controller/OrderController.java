@@ -21,7 +21,6 @@ public class OrderController {
     @PostMapping("")
     public Response<Order> postOrder(@RequestBody Order order){
         orderService.setOrderProcessor(orderProcessorFactory.createOrderProcessor(order));
-        orderService.process(order);
-        return new Response(order, 200, "OK");
+        return new Response(orderService.process(order), 200, "OK");
     }
 }

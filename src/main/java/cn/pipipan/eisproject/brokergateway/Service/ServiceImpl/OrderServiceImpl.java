@@ -2,6 +2,7 @@ package cn.pipipan.eisproject.brokergateway.Service.ServiceImpl;
 
 import cn.pipipan.eisproject.brokergateway.Core.TraderComposite;
 import cn.pipipan.eisproject.brokergateway.Dao.OrderRepository;
+import cn.pipipan.eisproject.brokergateway.Dao.TraderCompositeRepository;
 import cn.pipipan.eisproject.brokergateway.Domain.Order;
 import cn.pipipan.eisproject.brokergateway.Core.OrderProcessor;
 import cn.pipipan.eisproject.brokergateway.Service.OrderService;
@@ -15,25 +16,19 @@ import java.util.Map;
 
 @Service
 public class OrderServiceImpl implements OrderService {
-
     @Autowired
     OrderRepository orderRepository;
+    @Autowired
+    TraderCompositeRepository traderCompositeRepository;
 
-
-    private Map<String, List<TraderComposite>> buyer = new HashMap<>();
-    private Map<String, List<TraderComposite>> seller = new HashMap<>();
-    
     private OrderProcessor orderProcessor;
 
-    public void process(Order order){
+    public Order process(Order order){
         orderRepository.save(order);
-        initSpecificMapValue(order, buyer);
-        initSpecificMapValue(order, seller);
-        orderProcessor.process(order,buyer.get(order.getItemId()), seller.get(order.getItemId()));
-    }
-
-    private void initSpecificMapValue(Order order, Map<String, List<TraderComposite>> map) {
-        map.computeIfAbsent(order.getItemId(), k -> new ArrayList<>());
+        List<TraderComposite> buyerTraderComposite = traderCompositeRepository.getBuyerTraderCompositeByItemId(order.getItemId());
+        List<TraderComposite> sellerTraderComposite = traderCompositeRepository.getSellerTraderCompositeByItemId(order.getItemId());
+        orderProcessor.process(order, buyerTraderComposite, sellerTraderComposite);
+        return order;
     }
 
     public void setOrderProcessor(OrderProcessor orderProcessor){

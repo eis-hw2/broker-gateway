@@ -6,14 +6,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 
 @Component("LimitOrderProcessor")
 public class LimitOrderProcessor extends OrderProcessor{
     @Autowired
     OrderRepository orderRepository;
 
+    //ExecutorService pool;
+
     @Override
-    public void process(Order order, List<TraderComposite> buyer, List<TraderComposite> seller) {
-        System.out.println(order.getId());
+    public Order process(Order order, List<TraderComposite> buyer, List<TraderComposite> seller) {
+        synchronized (buyer){
+            System.out.println(order.getId());
+        }
+        return order;
     }
 }
