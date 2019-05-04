@@ -6,7 +6,7 @@ import org.aspectj.weaver.ast.Or;
 
 import java.util.List;
 
-public interface TraderCompositeRepository {
+public interface CoreDataStructureRepository {
     public List<TraderComposite> getBuyerTraderCompositeByItemId(String itemId);
     public List<TraderComposite> getSellerTraderCompositeByItemId(String itemId);
     public List<Order> getRemainedMarketOrdersByItemId(String itemId);

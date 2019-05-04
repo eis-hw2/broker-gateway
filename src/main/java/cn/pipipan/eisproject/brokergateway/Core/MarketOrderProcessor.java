@@ -1,9 +1,7 @@
 package cn.pipipan.eisproject.brokergateway.Core;
 
-import cn.pipipan.eisproject.brokergateway.Dao.OrderBlotterRepository;
 import cn.pipipan.eisproject.brokergateway.Domain.Order;
 import cn.pipipan.eisproject.brokergateway.Service.OrderBlotterService;
-import org.aspectj.weaver.ast.Or;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,34 +20,25 @@ public class MarketOrderProcessor extends OrderProcessor{
     public Order process(Order order) {
         super.process(order);
         List<TraderComposite> traderComposites = order.getPosition() == Order.BUYER ? seller : buyer;
-        tradeWithLimitOrders(order, traderComposites);
-        if (order.getCount() > 0) {
-            marketOrders.add(order);
-            log.info("marketOrderSize: {}", marketOrders.size());
-            traderCompositeRepository.saveRemainedMarketOrdersByItemId(order.getItemId(), marketOrders);
-        }
+        tradeWithTraderComposite(order, traderComposites);
+        if (!order.finished()) addMarketOrderIntoList(order);
         return order;
     }
 
-    private void tradeWithLimitOrders(Order order, List<TraderComposite> traderComposites){
+    private void addMarketOrderIntoList(Order order) {
+        marketOrders.add(order);
+        log.info("addMarketOrderIntoList: marketOrderSize: {}", marketOrders.size());
+        coreDataStructureRepository.saveRemainedMarketOrdersByItemId(order.getItemId(), marketOrders);
+    }
+
+    private void tradeWithTraderComposite(Order order, List<TraderComposite> traderComposites){
         Iterator<TraderComposite> it = traderComposites.iterator();
-        while (it.hasNext()) {
+        while (it.hasNext() && !order.finished()) {
             TraderComposite traderComposite = it.next();
-            Iterator<Order> orderIterator = traderComposite.getOrders().iterator();
-            while (orderIterator.hasNext()) {
-                Order tradedOrder = orderIterator.next();
-                if (tradedOrder.getCount() <= order.getCount()){
-                    orderBlotterService.sealOneDeal(order, tradedOrder, tradedOrder.getPrice());
-                    orderIterator.remove();
-                }
-                else {
-                    orderBlotterService.sealOneDeal(tradedOrder, order, tradedOrder.getPrice());
-                    if (order.getPrice() == Order.BUYER)  traderCompositeRepository.saveSellerTraderCompositeByItemId(order.getItemId(), traderComposites) ;
-                    else traderCompositeRepository.saveBuyerTraderCompositeByItemId(order.getItemId(), traderComposites);
-                    return;
-                }
-            }
-            it.remove();
+            tradeWithOrder(order, traderComposite.getOrders(), orderBlotterService);
+            if (traderComposite.getOrders().isEmpty()) it.remove();
         }
+        if (order.getPosition() == Order.BUYER)  coreDataStructureRepository.saveSellerTraderCompositeByItemId(order.getItemId(), traderComposites) ;
+        else coreDataStructureRepository.saveBuyerTraderCompositeByItemId(order.getItemId(), traderComposites);
     }
 }

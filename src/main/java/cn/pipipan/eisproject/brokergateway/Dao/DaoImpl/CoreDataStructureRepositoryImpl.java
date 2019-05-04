@@ -1,7 +1,7 @@
 package cn.pipipan.eisproject.brokergateway.Dao.DaoImpl;
 
 import cn.pipipan.eisproject.brokergateway.Core.TraderComposite;
-import cn.pipipan.eisproject.brokergateway.Dao.TraderCompositeRepository;
+import cn.pipipan.eisproject.brokergateway.Dao.CoreDataStructureRepository;
 import cn.pipipan.eisproject.brokergateway.Domain.Order;
 import org.springframework.stereotype.Repository;
 
@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
-public class TraderCompositeRepositoryImpl implements TraderCompositeRepository {
+public class CoreDataStructureRepositoryImpl implements CoreDataStructureRepository {
     private Map<String, List<TraderComposite>> buyer = new HashMap<>();
     private Map<String, List<TraderComposite>> seller = new HashMap<>();
     private Map<String, List<Order>> remainedMarketOrders = new HashMap<>();

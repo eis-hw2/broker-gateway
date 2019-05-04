@@ -9,6 +9,11 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Order {
     public static final int BUYER = 0;
     public static final int SELLER = 1;
+
+    public void minusCount(int delta) {
+        this.count -= delta;
+    }
+
     public static enum Type{
         LIMIT,
         MARKET,
@@ -88,6 +93,10 @@ public class Order {
     }
 
     public boolean canAfford(int price){
-        return position == Order.SELLER ? this.price < price : this.price > price;
+        return position == Order.SELLER ? this.price <= price : this.price >= price;
+    }
+
+    public boolean finished() {
+        return count <= 0;
     }
 }

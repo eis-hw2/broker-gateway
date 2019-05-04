@@ -13,9 +13,13 @@ public class OrderBlotterServiceImpl implements OrderBlotterService {
     OrderBlotterRepository orderBlotterRepository;
 
     @Override
-    public void sealOneDeal(Order bigOrder, Order smallOrder, int price) {
-        OrderBlotter orderBlotter = OrderBlotter.createOrderBlotter(bigOrder, smallOrder, price);
-        bigOrder.setCount(bigOrder.getCount() - smallOrder.getCount());
+    //TODO 完成一笔交易并通知StopOrder队列 通过比对price和order来确定买方成交还是卖方成交
+    public void sealOneDeal(Order order1, Order order2, int price) {
+        if (order1.getPosition() == order2.getPosition()) return;
+        OrderBlotter orderBlotter = OrderBlotter.createOrderBlotter(order1, order2, price);
+        int delta = Math.min(order1.getCount(), order2.getCount());
+        order1.minusCount(delta);
+        order2.minusCount(delta);
         System.out.println(orderBlotter);
         //orderBlotterRepository.save(orderBlotter);
     }

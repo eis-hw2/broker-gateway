@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+//TODO 通过RabbitMQ监听变化
 @Component("StopOrderProcessor")
 public class StopOrderProcessor extends OrderProcessor{
     @Override
