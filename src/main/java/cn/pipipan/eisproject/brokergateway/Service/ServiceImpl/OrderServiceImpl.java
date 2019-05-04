@@ -18,17 +18,12 @@ import java.util.Map;
 public class OrderServiceImpl implements OrderService {
     @Autowired
     OrderRepository orderRepository;
-    @Autowired
-    TraderCompositeRepository traderCompositeRepository;
 
     private OrderProcessor orderProcessor;
 
     public Order process(Order order){
         orderRepository.save(order);
-        List<TraderComposite> buyerTraderComposite = traderCompositeRepository.getBuyerTraderCompositeByItemId(order.getItemId());
-        List<TraderComposite> sellerTraderComposite = traderCompositeRepository.getSellerTraderCompositeByItemId(order.getItemId());
-        List<Order> remainedMarketOrders = traderCompositeRepository.getRemainedMarketOrders();
-        return orderProcessor.process(order, buyerTraderComposite, sellerTraderComposite, remainedMarketOrders);
+        return orderProcessor.process(order);
     }
 
     public void setOrderProcessor(OrderProcessor orderProcessor){

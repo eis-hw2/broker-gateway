@@ -5,14 +5,14 @@ import cn.pipipan.eisproject.brokergateway.Domain.Order;
 import java.util.List;
 
 public class TraderComposite {
-    double price;
+    int price;
     List<Order> orders;
 
-    public double getPrice() {
+    public int getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 

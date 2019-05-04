@@ -8,5 +8,6 @@ import java.util.List;
 public interface TraderCompositeRepository {
     public List<TraderComposite> getBuyerTraderCompositeByItemId(String itemId);
     public List<TraderComposite> getSellerTraderCompositeByItemId(String itemId);
-    public List<Order> getRemainedMarketOrders();
+    public List<Order> getRemainedMarketOrdersByItemId(String itemId);
+    public List<Order> getRemainedStopOrdersByItemId(String itemId);
 }

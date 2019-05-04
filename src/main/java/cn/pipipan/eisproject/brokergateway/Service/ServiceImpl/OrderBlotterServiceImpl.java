@@ -13,8 +13,8 @@ public class OrderBlotterServiceImpl implements OrderBlotterService {
     OrderBlotterRepository orderBlotterRepository;
 
     @Override
-    public void sealOneDeal(Order bigOrder, Order smallOrder) {
-        OrderBlotter orderBlotter = OrderBlotter.createOrderBlotter(bigOrder, smallOrder);
+    public void sealOneDeal(Order bigOrder, Order smallOrder, int price) {
+        OrderBlotter orderBlotter = OrderBlotter.createOrderBlotter(bigOrder, smallOrder, price);
         bigOrder.setCount(bigOrder.getCount() - smallOrder.getCount());
         System.out.println(orderBlotter);
         //orderBlotterRepository.save(orderBlotter);

@@ -27,6 +27,8 @@ public class Order {
     //MarketOrder
     //StopOrder
     //CancelOrder
+    @ApiModelProperty(notes = "准备取消的orderId")
+    String orderId;
 
 
     public Type getType() {
@@ -75,5 +77,17 @@ public class Order {
 
     public void setCount(int count) {
         this.count = count;
+    }
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
+
+    public boolean canAfford(int price){
+        return position == Order.SELLER ? this.price < price : this.price > price;
     }
 }

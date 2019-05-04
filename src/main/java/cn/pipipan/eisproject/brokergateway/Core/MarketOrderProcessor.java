@@ -19,7 +19,8 @@ public class MarketOrderProcessor extends OrderProcessor{
     OrderBlotterService orderBlotterService;
 
     @Override
-    public Order process(Order order, List<TraderComposite> buyer, List<TraderComposite> seller, List<Order> marketOrders) {
+    public Order process(Order order) {
+        super.process(order);
         List<TraderComposite> traderComposites = order.getPosition() == Order.BUYER ? seller : buyer;
         tradeWithLimitOrders(order, traderComposites);
         if (order.getCount() > 0) {
@@ -37,11 +38,11 @@ public class MarketOrderProcessor extends OrderProcessor{
             while (orderIterator.hasNext()) {
                 Order tradedOrder = orderIterator.next();
                 if (tradedOrder.getCount() <= order.getCount()){
-                    orderBlotterService.sealOneDeal(order, tradedOrder);
+                    orderBlotterService.sealOneDeal(order, tradedOrder, tradedOrder.getPrice());
                     orderIterator.remove();
                 }
                 else {
-                    orderBlotterService.sealOneDeal(tradedOrder, order);
+                    orderBlotterService.sealOneDeal(tradedOrder, order, tradedOrder.getPrice());
                     return;
                 }
             }

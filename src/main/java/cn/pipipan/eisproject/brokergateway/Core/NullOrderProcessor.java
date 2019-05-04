@@ -6,7 +6,8 @@ import java.util.List;
 
 public class NullOrderProcessor extends OrderProcessor{
     @Override
-    public Order process(Order order, List<TraderComposite> buyer, List<TraderComposite> seller, List<Order> marketOrders) {
+    public Order process(Order order) {
+        super.process(order);
         return order;
     }
 }

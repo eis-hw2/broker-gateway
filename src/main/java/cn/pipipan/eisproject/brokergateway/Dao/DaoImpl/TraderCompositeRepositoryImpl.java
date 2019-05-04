@@ -14,26 +14,30 @@ import java.util.Map;
 public class TraderCompositeRepositoryImpl implements TraderCompositeRepository {
     private Map<String, List<TraderComposite>> buyer = new HashMap<>();
     private Map<String, List<TraderComposite>> seller = new HashMap<>();
-    private List<Order> remainedMarketOrders = new ArrayList<>();
+    private Map<String, List<Order>> remainedMarketOrders = new HashMap<>();
+    private Map<String, List<Order>> remainedStopOrders = new HashMap<>();
 
     @Override
     public List<TraderComposite> getBuyerTraderCompositeByItemId(String itemId) {
-        initSpecificMapValue(itemId, buyer);
+        buyer.computeIfAbsent(itemId, k -> new ArrayList<>());
         return buyer.get(itemId);
     }
 
     @Override
-    public List<Order> getRemainedMarketOrders() {
-        return remainedMarketOrders;
+    public List<Order> getRemainedMarketOrdersByItemId(String itemId) {
+        remainedMarketOrders.computeIfAbsent(itemId, k -> new ArrayList<>());
+        return remainedMarketOrders.get(itemId);
+    }
+
+    @Override
+    public List<Order> getRemainedStopOrdersByItemId(String itemId) {
+        remainedStopOrders.computeIfAbsent(itemId, k -> new ArrayList<>());
+        return remainedStopOrders.get(itemId);
     }
 
     @Override
     public List<TraderComposite> getSellerTraderCompositeByItemId(String itemId) {
-        initSpecificMapValue(itemId, seller);
+        seller.computeIfAbsent(itemId, k -> new ArrayList<>());
         return seller.get(itemId);
-    }
-
-    private void initSpecificMapValue(String itemId, Map<String, List<TraderComposite>> map) {
-        map.computeIfAbsent(itemId, k -> new ArrayList<>());
     }
 }
