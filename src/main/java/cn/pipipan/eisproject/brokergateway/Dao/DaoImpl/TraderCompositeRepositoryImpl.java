@@ -36,6 +36,26 @@ public class TraderCompositeRepositoryImpl implements TraderCompositeRepository 
     }
 
     @Override
+    public List<TraderComposite> saveBuyerTraderCompositeByItemId(String itemId, List<TraderComposite> traderComposites) {
+        return traderComposites;
+    }
+
+    @Override
+    public List<TraderComposite> saveSellerTraderCompositeByItemId(String itemId, List<TraderComposite> traderComposites) {
+        return traderComposites;
+    }
+
+    @Override
+    public List<Order> saveRemainedMarketOrdersByItemId(String itemId, List<Order> orders) {
+        return orders;
+    }
+
+    @Override
+    public List<Order> saveRemainedStopOrdersByItemId(String itemId, List<Order> orders) {
+        return orders;
+    }
+
+    @Override
     public List<TraderComposite> getSellerTraderCompositeByItemId(String itemId) {
         seller.computeIfAbsent(itemId, k -> new ArrayList<>());
         return seller.get(itemId);

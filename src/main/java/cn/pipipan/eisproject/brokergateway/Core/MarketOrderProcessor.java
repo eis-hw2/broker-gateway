@@ -26,6 +26,7 @@ public class MarketOrderProcessor extends OrderProcessor{
         if (order.getCount() > 0) {
             marketOrders.add(order);
             log.info("marketOrderSize: {}", marketOrders.size());
+            traderCompositeRepository.saveRemainedMarketOrdersByItemId(order.getItemId(), marketOrders);
         }
         return order;
     }
@@ -43,6 +44,8 @@ public class MarketOrderProcessor extends OrderProcessor{
                 }
                 else {
                     orderBlotterService.sealOneDeal(tradedOrder, order, tradedOrder.getPrice());
+                    if (order.getPrice() == Order.BUYER)  traderCompositeRepository.saveSellerTraderCompositeByItemId(order.getItemId(), traderComposites) ;
+                    else traderCompositeRepository.saveBuyerTraderCompositeByItemId(order.getItemId(), traderComposites);
                     return;
                 }
             }
