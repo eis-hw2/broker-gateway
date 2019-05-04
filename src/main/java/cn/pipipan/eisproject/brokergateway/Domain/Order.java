@@ -21,7 +21,7 @@ public class Order {
     String itemId;
     @ApiModelProperty(notes = "0代表买方，1代表卖方")
     int position;
-    double price;
+    int price;
     int count;
     //LimitOrder
     //MarketOrder
@@ -61,11 +61,11 @@ public class Order {
         this.position = position;
     }
 
-    public double getPrice() {
+    public int getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 
