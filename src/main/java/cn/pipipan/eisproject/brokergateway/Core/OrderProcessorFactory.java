@@ -17,14 +17,14 @@ public class OrderProcessorFactory implements ApplicationContextAware {
             case LIMIT:
                 return applicationContext.getBean("LimitOrderProcessor", LimitOrderProcessor.class);
             case MARKET:
-                return applicationContext.getBean("MarketOrderProcessor", LimitOrderProcessor.class);
+                return applicationContext.getBean("MarketOrderProcessor", MarketOrderProcessor.class);
             case STOP:
-                return applicationContext.getBean("StopOrderProcessor", LimitOrderProcessor.class);
+                return applicationContext.getBean("StopOrderProcessor", StopOrderProcessor.class);
             case CANCEL:
-                return applicationContext.getBean("CancelOrderProcessor", LimitOrderProcessor.class);
+                return applicationContext.getBean("CancelOrderProcessor", CancelOrderProcessor.class);
         }
         log.error("Wrong Order Type");
-        return applicationContext.getBean("NullOrderProcessor", LimitOrderProcessor.class);
+        return applicationContext.getBean("NullOrderProcessor", NullOrderProcessor.class);
     }
 
     @Override
