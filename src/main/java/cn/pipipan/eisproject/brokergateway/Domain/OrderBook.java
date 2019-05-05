@@ -8,7 +8,7 @@ import java.util.List;
 public class OrderBook {
     class Pair{
         int count;
-        int price;
+        int unitPrice;
 
         public int getCount() {
             return count;
@@ -18,17 +18,17 @@ public class OrderBook {
             this.count = count;
         }
 
-        public int getPrice() {
-            return price;
+        public int getUnitPrice() {
+            return unitPrice;
         }
 
-        public void setPrice(int price) {
-            this.price = price;
+        public void setUnitPrice(int unitPrice) {
+            this.unitPrice = unitPrice;
         }
 
-        public Pair(int count, int price) {
+        public Pair(int count, int unitPrice) {
             this.count = count;
-            this.price = price;
+            this.unitPrice = unitPrice;
         }
     }
     List<Pair> buyer = new ArrayList<>();

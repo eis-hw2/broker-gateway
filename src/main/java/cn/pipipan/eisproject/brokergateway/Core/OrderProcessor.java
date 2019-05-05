@@ -28,10 +28,10 @@ public abstract class OrderProcessor {
     }
 
     protected void init(Order order) {
-        buyer = coreDataStructureRepository.getBuyerTraderCompositeByItemId(order.getItemId());
-        seller = coreDataStructureRepository.getSellerTraderCompositeByItemId(order.getItemId());
-        marketOrders = coreDataStructureRepository.getRemainedMarketOrdersByItemId(order.getItemId());
-        stopOrders = coreDataStructureRepository.getRemainedStopOrdersByItemId(order.getItemId());
+        buyer = coreDataStructureRepository.getBuyerTraderCompositeByItemId(order.getFutureId());
+        seller = coreDataStructureRepository.getSellerTraderCompositeByItemId(order.getFutureId());
+        marketOrders = coreDataStructureRepository.getRemainedMarketOrdersByItemId(order.getFutureId());
+        stopOrders = coreDataStructureRepository.getRemainedStopOrdersByItemId(order.getFutureId());
         log.info("marketOrders:{}", marketOrders.size());
     }
 
@@ -39,7 +39,7 @@ public abstract class OrderProcessor {
         Iterator<Order> orderIterator = orders.iterator();
         while (orderIterator.hasNext()) {
             Order tradedOrder = orderIterator.next();
-            orderBlotterService.sealOneDeal(order, tradedOrder, tradedOrder.getPrice());
+            orderBlotterService.sealOneDeal(order, tradedOrder, tradedOrder.getUnitPrice());
             log.info("tradeWithOrders order.count:{}", order.getCount());
             if (tradedOrder.finished()) orderIterator.remove();
             if (order.finished()) break;

@@ -8,7 +8,7 @@ import java.util.List;
 public class TraderComposite {
     public static TraderComposite createTraderComposite(Order order){
         TraderComposite res = new TraderComposite();
-        res.setPrice(order.getPrice());
+        res.setPrice(order.getUnitPrice());
         List<Order> orders = new ArrayList<>();
         orders.add(order);
         res.setOrders(orders);

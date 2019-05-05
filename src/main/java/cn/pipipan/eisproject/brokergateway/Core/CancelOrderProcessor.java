@@ -29,7 +29,7 @@ public class CancelOrderProcessor extends OrderProcessor{
                 stopOrderIt.remove();
                 order.setCount(stopOrder.getCount());
                 log.info("stopOrders size after cancel stopOrder: {}", stopOrders.size());
-                coreDataStructureRepository.saveRemainedStopOrdersByItemId(canceledOrder.getItemId(), marketOrders);
+                coreDataStructureRepository.saveRemainedStopOrdersByItemId(canceledOrder.getFutureId(), marketOrders);
                 return order;
             }
         }
@@ -42,7 +42,7 @@ public class CancelOrderProcessor extends OrderProcessor{
                 marketOrderIt.remove();
                 order.setCount(marketOrder.getCount());
                 log.info("marketOrders size after cancel marketOrder: {}", marketOrders.size());
-                coreDataStructureRepository.saveRemainedMarketOrdersByItemId(canceledOrder.getItemId(), marketOrders);
+                coreDataStructureRepository.saveRemainedMarketOrdersByItemId(canceledOrder.getFutureId(), marketOrders);
                 return order;
             }
         }
@@ -66,8 +66,8 @@ public class CancelOrderProcessor extends OrderProcessor{
                 log.info("remove empty traderComposite");
                 traderCompositeIt.remove();
             }
-            if (canceledOrder.getPosition() == Order.BUYER) coreDataStructureRepository.saveBuyerTraderCompositeByItemId(canceledOrder.getItemId(), traderComposites);
-            else coreDataStructureRepository.saveSellerTraderCompositeByItemId(canceledOrder.getItemId(), traderComposites);
+            if (canceledOrder.getPosition() == Order.BUYER) coreDataStructureRepository.saveBuyerTraderCompositeByItemId(canceledOrder.getFutureId(), traderComposites);
+            else coreDataStructureRepository.saveSellerTraderCompositeByItemId(canceledOrder.getFutureId(), traderComposites);
         }
         return order;
     }
@@ -75,14 +75,14 @@ public class CancelOrderProcessor extends OrderProcessor{
     private Iterator<TraderComposite> getIterator(Order order, List<TraderComposite> traderCompositeList) {
         //TODO 使用二分搜索查找
         for (int i=0; i<traderCompositeList.size(); ++i){
-            if (traderCompositeList.get(i).getPrice() == order.getPrice()) return traderCompositeList.listIterator(i);
+            if (traderCompositeList.get(i).getPrice() == order.getUnitPrice()) return traderCompositeList.listIterator(i);
         }
         return null;
     }
 
     private void completeOrder(Order order, Order canceledOrder) {
-        order.setPrice(canceledOrder.getPrice());
+        order.setUnitPrice(canceledOrder.getUnitPrice());
         order.setPosition(canceledOrder.getPosition());
-        order.setItemId(canceledOrder.getItemId());
+        order.setFutureId(canceledOrder.getFutureId());
     }
 }

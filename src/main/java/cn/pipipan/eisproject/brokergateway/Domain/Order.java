@@ -20,14 +20,21 @@ public class Order {
         STOP,
         CANCEL
     }
-    Type type;
+
+    public static enum Status{
+        PENDING,
+        DONE;
+    }
+
     @Id
     String id;
-    String itemId;
+    String futureId;
+    Status status = Status.PENDING;
     @ApiModelProperty(notes = "0代表买方，1代表卖方")
     int position;
-    int price;
+    int unitPrice;
     int count;
+    Type type;
     //LimitOrder
     //MarketOrder
     //StopOrder
@@ -52,12 +59,12 @@ public class Order {
         this.id = id;
     }
 
-    public String getItemId() {
-        return itemId;
+    public String getFutureId() {
+        return futureId;
     }
 
-    public void setItemId(String itemId) {
-        this.itemId = itemId;
+    public void setFutureId(String futureId) {
+        this.futureId = futureId;
     }
 
     public int getPosition() {
@@ -68,12 +75,12 @@ public class Order {
         this.position = position;
     }
 
-    public int getPrice() {
-        return price;
+    public int getUnitPrice() {
+        return unitPrice;
     }
 
-    public void setPrice(int price) {
-        this.price = price;
+    public void setUnitPrice(int unitPrice) {
+        this.unitPrice = unitPrice;
     }
 
     public int getCount() {
@@ -93,10 +100,18 @@ public class Order {
     }
 
     public boolean canAfford(int price){
-        return position == Order.SELLER ? this.price <= price : this.price >= price;
+        return position == Order.SELLER ? this.unitPrice <= price : this.unitPrice >= price;
     }
 
     public boolean finished() {
         return count <= 0;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 }

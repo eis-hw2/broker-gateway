@@ -28,7 +28,7 @@ public class MarketOrderProcessor extends OrderProcessor{
     private void addMarketOrderIntoList(Order order) {
         marketOrders.add(order);
         log.info("addMarketOrderIntoList: marketOrderSize: {}", marketOrders.size());
-        coreDataStructureRepository.saveRemainedMarketOrdersByItemId(order.getItemId(), marketOrders);
+        coreDataStructureRepository.saveRemainedMarketOrdersByItemId(order.getFutureId(), marketOrders);
     }
 
     private void tradeWithTraderComposite(Order order, List<TraderComposite> traderComposites){
@@ -38,7 +38,7 @@ public class MarketOrderProcessor extends OrderProcessor{
             tradeWithOrder(order, traderComposite.getOrders(), orderBlotterService);
             if (traderComposite.getOrders().isEmpty()) it.remove();
         }
-        if (order.getPosition() == Order.BUYER)  coreDataStructureRepository.saveSellerTraderCompositeByItemId(order.getItemId(), traderComposites) ;
-        else coreDataStructureRepository.saveBuyerTraderCompositeByItemId(order.getItemId(), traderComposites);
+        if (order.getPosition() == Order.BUYER)  coreDataStructureRepository.saveSellerTraderCompositeByItemId(order.getFutureId(), traderComposites) ;
+        else coreDataStructureRepository.saveBuyerTraderCompositeByItemId(order.getFutureId(), traderComposites);
     }
 }
