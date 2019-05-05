@@ -23,7 +23,6 @@ public class OrderController {
 
     @PostMapping("")
     public Response<Order> postOrder(@RequestBody Order order){
-        orderService.setOrderProcessor(orderProcessorFactory.createOrderProcessor(order));
         return new Response(orderService.process(order), 200, "OK");
     }
 }

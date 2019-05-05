@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class OrderBookController {
     @Autowired
     CoreDataStructureRepository coreDataStructureRepository;
-    @GetMapping("/{itemId}")
-    public OrderBook getOrderBook(@PathVariable("itemId") String itemId){
+    @GetMapping("/{featureId}")
+    public OrderBook getOrderBook(@PathVariable("featureId") String itemId){
         return new OrderBook(coreDataStructureRepository.getBuyerTraderCompositeByItemId(itemId),
                 coreDataStructureRepository.getSellerTraderCompositeByItemId(itemId));
     }
