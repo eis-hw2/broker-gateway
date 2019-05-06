@@ -17,7 +17,7 @@ pipeline:
     volumes:
         - /var/run/docker.sock:/var/run/docker.sock
     when:
-        branch: [master, dev]
+        branch: master
         status: success
 
   deploy:
