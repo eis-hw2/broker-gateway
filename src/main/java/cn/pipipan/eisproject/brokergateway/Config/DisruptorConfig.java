@@ -6,7 +6,6 @@ import cn.pipipan.eisproject.brokergateway.EventHandler.OrderEventFactory;
 import cn.pipipan.eisproject.brokergateway.EventHandler.OrderEventHandler;
 import cn.pipipan.eisproject.brokergateway.EventHandler.OrderEventProducerWithTranslator;
 import com.lmax.disruptor.EventHandler;
-import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.util.DaemonThreadFactory;
 import org.springframework.context.annotation.Bean;
@@ -21,9 +20,7 @@ public class DisruptorConfig {
 
     @Bean
     EventHandler<OrderEvent> orderEventHandler(OrderProcessorFactory orderProcessorFactory){
-        OrderEventHandler orderEventEventHandler = new OrderEventHandler();
-        orderEventEventHandler.setOrderProcessorFactory(orderProcessorFactory);
-        return orderEventEventHandler;
+        return new OrderEventHandler();
     }
 
     @Bean
