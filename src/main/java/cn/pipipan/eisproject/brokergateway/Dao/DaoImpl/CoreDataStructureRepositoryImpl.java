@@ -56,6 +56,14 @@ public class CoreDataStructureRepositoryImpl implements CoreDataStructureReposit
     }
 
     @Override
+    public void clear() {
+        this.buyer.clear();
+        this.seller.clear();
+        this.remainedMarketOrders.clear();
+        this.remainedStopOrders.clear();
+    }
+
+    @Override
     public List<TraderComposite> getSellerTraderCompositeByItemId(String itemId) {
         seller.computeIfAbsent(itemId, k -> new ArrayList<>());
         return seller.get(itemId);

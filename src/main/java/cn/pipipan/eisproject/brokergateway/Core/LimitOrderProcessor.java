@@ -21,12 +21,11 @@ public class LimitOrderProcessor extends OrderProcessor{
     //ExecutorService pool;
 
     @Override
-    public Order process(Order order) {
-        super.process(order);
+    public void doProcess(Order order) {
         List<TraderComposite> traderComposites = order.getPosition() == Order.BUYER ? seller : buyer;
         List<TraderComposite> waitingComposites = order.getPosition() == Order.SELLER ? seller : buyer;
         tradeWithMarketOrder(order, marketOrders);
-        if (order.finished()) return order;
+        if (order.finished()) return;
         if (traderComposites.isEmpty()){
             insertIntoWaitingQueue(order, waitingComposites);
         }
@@ -36,7 +35,6 @@ public class LimitOrderProcessor extends OrderProcessor{
         }
         log.info("seller: {}", JSONObject.toJSONString(seller));
         log.info("buyer: {}", JSONObject.toJSONString(buyer));
-        return order;
     }
 
     private void tradeWithMarketOrder(Order order, List<Order> marketOrders) {

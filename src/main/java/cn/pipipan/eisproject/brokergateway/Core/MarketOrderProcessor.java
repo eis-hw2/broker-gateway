@@ -17,12 +17,10 @@ public class MarketOrderProcessor extends OrderProcessor{
     OrderBlotterService orderBlotterService;
 
     @Override
-    public Order process(Order order) {
-        super.process(order);
+    public void doProcess(Order order) {
         List<TraderComposite> traderComposites = order.getPosition() == Order.BUYER ? seller : buyer;
         tradeWithTraderComposite(order, traderComposites);
         if (!order.finished()) addMarketOrderIntoList(order);
-        return order;
     }
 
     private void addMarketOrderIntoList(Order order) {

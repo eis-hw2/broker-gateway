@@ -20,12 +20,12 @@ public abstract class OrderProcessor {
     List<Order> marketOrders;
     List<Order> stopOrders;
 
-    //TODO 可能需要分布式锁？
-    //TODO 考虑加入线程池
-    public Order process(Order order){
+    public void process(Order order){
         init(order);
-        return order;
+        doProcess(order);
     }
+
+    protected abstract void doProcess(Order order);
 
     protected void init(Order order) {
         buyer = coreDataStructureRepository.getBuyerTraderCompositeByItemId(order.getFutureId());
@@ -39,8 +39,10 @@ public abstract class OrderProcessor {
         Iterator<Order> orderIterator = orders.iterator();
         while (orderIterator.hasNext()) {
             Order tradedOrder = orderIterator.next();
-            orderBlotterService.sealOneDeal(order, tradedOrder, tradedOrder.getUnitPrice());
-            log.info("tradeWithOrders order.count:{}", order.getCount());
+            // TODO publish orderTransaction Event to AXON
+            //orderBlotterService.sealOneDeal(order, tradedOrder, tradedOrder.getUnitPrice());
+            int count = Math.min(order.getCount(), tradedOrder.getCount());
+            tradedOrder.minusCount(count); order.minusCount(count);
             if (tradedOrder.finished()) orderIterator.remove();
             if (order.finished()) break;
         }

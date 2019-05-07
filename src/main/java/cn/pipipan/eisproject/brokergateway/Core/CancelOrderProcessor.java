@@ -13,24 +13,19 @@ public class CancelOrderProcessor extends OrderProcessor{
     @Autowired
     OrderRepository orderRepository;
 
-    //TODO 加入错误处理
     @Override
-    public Order process(Order order) {
-        Order canceledOrder = orderRepository.findOrderById(order.getOrderId());
-        if (canceledOrder == null) return order;
-        init(canceledOrder);
-        completeOrder(order, canceledOrder);
-
+    public void doProcess(Order order) {
+        String canceledOrderId = order.getOrderId();
         // cancel the stopOrder
         Iterator<Order> stopOrderIt = stopOrders.iterator();
         while (stopOrderIt.hasNext()){
             Order stopOrder = stopOrderIt.next();
-            if (stopOrder.getId().equals(canceledOrder.getId())) {
+            if (stopOrder.getId().equals(canceledOrderId)) {
                 stopOrderIt.remove();
                 order.setCount(stopOrder.getCount());
                 log.info("stopOrders size after cancel stopOrder: {}", stopOrders.size());
-                coreDataStructureRepository.saveRemainedStopOrdersByItemId(canceledOrder.getFutureId(), marketOrders);
-                return order;
+                coreDataStructureRepository.saveRemainedStopOrdersByItemId(order.getFutureId(), marketOrders);
+                return;
             }
         }
 
@@ -38,12 +33,12 @@ public class CancelOrderProcessor extends OrderProcessor{
         Iterator<Order> marketOrderIt = marketOrders.iterator();
         while (marketOrderIt.hasNext()){
             Order marketOrder = marketOrderIt.next();
-            if (marketOrder.getId().equals(canceledOrder.getId())) {
+            if (marketOrder.getId().equals(canceledOrderId)) {
                 marketOrderIt.remove();
                 order.setCount(marketOrder.getCount());
                 log.info("marketOrders size after cancel marketOrder: {}", marketOrders.size());
-                coreDataStructureRepository.saveRemainedMarketOrdersByItemId(canceledOrder.getFutureId(), marketOrders);
-                return order;
+                coreDataStructureRepository.saveRemainedMarketOrdersByItemId(order.getFutureId(), marketOrders);
+                return;
             }
         }
 
@@ -55,7 +50,7 @@ public class CancelOrderProcessor extends OrderProcessor{
             Iterator<Order> it = traderComposite.getOrders().iterator();
             while (it.hasNext()){
                 Order foundOrder = it.next();
-                if (foundOrder.getId().equals(canceledOrder.getId())) {
+                if (foundOrder.getId().equals(canceledOrderId)) {
                     order.setCount(foundOrder.getCount());
                     it.remove();
                     log.info("LimitOrders size after cancel limitOrder: {}", traderComposites.size());
@@ -66,10 +61,10 @@ public class CancelOrderProcessor extends OrderProcessor{
                 log.info("remove empty traderComposite");
                 traderCompositeIt.remove();
             }
-            if (canceledOrder.getPosition() == Order.BUYER) coreDataStructureRepository.saveBuyerTraderCompositeByItemId(canceledOrder.getFutureId(), traderComposites);
-            else coreDataStructureRepository.saveSellerTraderCompositeByItemId(canceledOrder.getFutureId(), traderComposites);
+            if (order.getPosition() == Order.BUYER) coreDataStructureRepository.saveBuyerTraderCompositeByItemId(order.getFutureId(), traderComposites);
+            else coreDataStructureRepository.saveSellerTraderCompositeByItemId(order.getFutureId(), traderComposites);
         }
-        return order;
+        return;
     }
 
     private Iterator<TraderComposite> getIterator(Order order, List<TraderComposite> traderCompositeList) {
@@ -78,11 +73,5 @@ public class CancelOrderProcessor extends OrderProcessor{
             if (traderCompositeList.get(i).getPrice() == order.getUnitPrice()) return traderCompositeList.listIterator(i);
         }
         return null;
-    }
-
-    private void completeOrder(Order order, Order canceledOrder) {
-        order.setUnitPrice(canceledOrder.getUnitPrice());
-        order.setPosition(canceledOrder.getPosition());
-        order.setFutureId(canceledOrder.getFutureId());
     }
 }
